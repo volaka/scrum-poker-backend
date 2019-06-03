@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "babel-node ./bin/www",
+    "dev": "NODE_ENV=development DEBUG=backend:server nodemon bin/www -x node_modules/.bin/babel-node"
+  },
+  "eslintConfig": {
+    "extends": [
+      "rallycoding"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "debug": "^4.1.1",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "eslint-config-rallycoding": "github:volaka/ESLint-Rallycoding",
+    "nodemon": "^1.19.1"
+  }
+}
