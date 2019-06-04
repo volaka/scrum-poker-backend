@@ -16,6 +16,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Setting routes
-app.use('/', indexRouter);
+app.use('/api', indexRouter);
 
 module.exports = app;
