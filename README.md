@@ -48,6 +48,28 @@ To start a postgres database quickly, you can run
 `npm run-script start:pg-docker` if you have docker 
 installed on you component.
 
+Database should have three tables:
+
+* `sprint` with columns:
+  * id:int
+  * name:varchar||text -> uniq constraint
+  * vote_count:smallint
+  * dev_link:varchar||text
+* `story` with columns:
+  * id:int
+  * name:varchar||text
+  * status:varchar||text
+  * s_id:int -> fk_sprint_id
+  * point:smallint
+* `vote` with column:
+  * id:int
+  * s_id:int -> fk_story_id
+  * point:smallint
+  * voter:smallint
+ 
+`db.sql` file has already written sql queries 
+to create those three tables.
+
 To start development server, run `npm run dev`.
 
 To start a production server, run `npm start`.
