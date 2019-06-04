@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "babel-node ./bin/www",
-    "dev": "NODE_ENV=development DEBUG=backend:server nodemon bin/www -x node_modules/.bin/babel-node"
+    "dev": "NODE_ENV=development DEBUG=backend:server nodemon bin/www -x node_modules/.bin/babel-node",
+    "start:pg-docker": "docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=password -v \"postgres\":\"/var/lib/postgresql/data\" -d postgres"
   },
   "eslintConfig": {
     "extends": [
