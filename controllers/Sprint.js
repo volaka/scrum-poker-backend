@@ -80,7 +80,7 @@ export const getSprintByName = (name) => new Promise(async (resolve, reject) => 
     await client.connect();
 
     // Get sprint from database
-    const getSprintQuery = 'SELECT * FROM sprint WHERE name=$1';
+    const getSprintQuery = 'SELECT * FROM sprint WHERE name=$1 or dev_link=$1';
     const getSprintValues = [name];
     const sprint = await client.query(getSprintQuery, getSprintValues);
 
@@ -109,7 +109,7 @@ export const getAllSprints = () => new Promise(async (resolve, reject) => {
     await client.connect();
 
     // Get sprint from database
-    const getSprintQuery = 'SELECT * FROM sprint';
+    const getSprintQuery = 'SELECT * FROM sprint order by id';
     const sprint = await client.query(getSprintQuery);
 
     // Close connection
@@ -137,7 +137,7 @@ export const getStoriesBySprintName = (name) => new Promise(async (resolve, reje
     const getStoriesQuery = 'SELECT story.id, story.name, story.status, story.point ' +
       'FROM story ' +
       'INNER JOIN sprint ON story.s_id=sprint.id ' +
-      'where sprint.name=$1 order by story.id';
+      'where sprint.name=$1 or dev_link=$1 order by story.id';
     const getStoriesValues = [name];
     const getStories = await client.query(getStoriesQuery, getStoriesValues);
 
@@ -171,7 +171,7 @@ export const getVotesOfActiveStoryOfSprint = (name) => new Promise(async (resolv
       '  FROM sprint ' +
       '  LEFT JOIN story ON story.s_id=sprint.id ' +
       '  LEFT JOIN vote ON vote.s_id=story.id ' +
-      '    where sprint.name=$1 and story.status=\'Active\'\n';
+      '    where (sprint.name=$1 or dev_link=$1) and story.status=\'Active\'\n';
     const getStoryVotesValues = [name];
     const getStoryVotes = await client.query(getStoryVotesQuery, getStoryVotesValues);
 
@@ -179,6 +179,27 @@ export const getVotesOfActiveStoryOfSprint = (name) => new Promise(async (resolv
     await client.end();
 
     resolve(getStoryVotes.rows);
+  } catch (e) {
+    reject(e.message);
+    console.error('Get Votes of Active Story - Controller: ', e.message);
+  }
+});
+
+export const setNewDevLink = (sprintName, newLink) => new Promise(async (resolve, reject) => {
+  try {
+    // Get Database client and connect
+    const client = getClient();
+    await client.connect();
+
+    // Get sprint from database
+    const setNewLinkQuery = 'UPDATE sprint SET dev_link = $1 WHERE name = $2 or dev_link = $2';
+    const setNewLinkValues = [newLink, sprintName];
+    await client.query(setNewLinkQuery, setNewLinkValues);
+
+    // Close connection
+    await client.end();
+
+    resolve();
   } catch (e) {
     reject(e.message);
     console.error('Get Votes of Active Story - Controller: ', e.message);
